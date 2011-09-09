@@ -4,9 +4,6 @@ QT -= gui
 DEPENDPATH += .
 INCLUDEPATH += .
 
-DEFINES += QUAZIP_BUILD
-CONFIG(staticlib): DEFINES += QUAZIP_STATIC
-
 # Input
 HEADERS += \
     crypt.h\
@@ -44,7 +41,7 @@ win32 {
     INSTALLS += headers target
 
     *-g++*: LIBS += -lz.dll
-    *-msvc*: LIBS += -lzlibwapi
+    *-msvc*: LIBS += -lzlib
     *-msvc*: QMAKE_LFLAGS += /IMPLIB:$$DESTDIR\\quazip.lib
 }
 
@@ -74,3 +71,7 @@ symbian {
         BLD_INF_RULES.prj_exports += "$$header $$exportheaders.path/$$basename(header)"
     }
 }
+
+
+
+DEFINES += QUAZIP_BUILD

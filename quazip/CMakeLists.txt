@@ -11,5 +11,6 @@ set(LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Lib
 
 include_directories(${CMAKE_SOURCE_DIR})
 add_subdirectory(quazip)
+add_subdirectory(test)
 
 install(FILES FindQuaZip.cmake DESTINATION ${CMAKE_ROOT}/Modules)

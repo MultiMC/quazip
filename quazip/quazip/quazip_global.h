@@ -25,18 +25,8 @@ quazip/(un)zip.h files for details, basically it's zlib license.
 #define QUAZIP_GLOBAL_H
 
 #include <QtCore/qglobal.h>
-
 /**
-  This is automatically defined when building a static library, but when
-  including QuaZip sources directly into a project, QUAZIP_STATIC should
-  be defined explicitly to avoid possible troubles with unnecessary
-  importing/exporting.
-  */
-#ifdef QUAZIP_STATIC
-#define QUAZIP_EXPORT
-#else
-/**
- * When building a DLL with MSVC, QUAZIP_BUILD must be defined.
+ * When building the library with MSVC, QUAZIP_BUILD must be defined.
  * qglobal.h takes care of defining Q_DECL_* correctly for msvc/gcc.
  */
 #if defined(QUAZIP_BUILD)
@@ -44,7 +34,6 @@ quazip/(un)zip.h files for details, basically it's zlib license.
 #else
 	#define QUAZIP_EXPORT Q_DECL_IMPORT
 #endif
-#endif // QUAZIP_STATIC
 
 #ifdef __GNUC__
 #define UNUSED __attribute__((__unused__))

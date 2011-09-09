@@ -260,8 +260,6 @@ bool QuaZipFile::open(OpenMode mode, const QuaZipNewInfo& info,
     info_z.dosDate = 0;
     info_z.internal_fa=(uLong)info.internalAttr;
     info_z.external_fa=(uLong)info.externalAttr;
-    if (!p->zip->isDataDescriptorWritingEnabled())
-        zipClearFlags(p->zip->getZipFile(), ZIP_WRITE_DATA_DESCRIPTOR);
     p->setZipError(zipOpenNewFileInZip3(p->zip->getZipFile(),
           p->zip->getFileNameCodec()->fromUnicode(info.name).constData(), &info_z,
           info.extraLocal.constData(), info.extraLocal.length(),
@@ -302,10 +300,7 @@ qint64 QuaZipFile::pos()const
     return -1;
   }
   if(openMode()&ReadOnly)
-      // QIODevice::pos() is broken for sequential devices,
-      // but thankfully bytesAvailable() returns the number of
-      // bytes buffered, so we know how far ahead we are.
-    return unztell(p->zip->getUnzFile()) - QIODevice::bytesAvailable();
+    return unztell(p->zip->getUnzFile());
   else
     return p->writePos;
 }
@@ -321,9 +316,7 @@ bool QuaZipFile::atEnd()const
     return false;
   }
   if(openMode()&ReadOnly)
-      // the same problem as with pos()
-    return QIODevice::bytesAvailable() == 0
-        && unzeof(p->zip->getUnzFile())==1;
+    return unzeof(p->zip->getUnzFile())==1;
   else
     return true;
 }
@@ -432,9 +425,4 @@ bool QuaZipFile::isRaw() const
 int QuaZipFile::getZipError() const
 {
   return p->zipError;
-}
-
-qint64 QuaZipFile::bytesAvailable() const
-{
-    return size() - pos();
 }

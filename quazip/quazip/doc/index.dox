@@ -28,12 +28,6 @@
  * QuaZIP provides complete abstraction of the ZIP/UNZIP API, for both
  * reading from and writing to ZIP archives.
  *
- * \section download Download QuaZIP
- *
- * Downloads are available from <a
- * href="http://sourceforge.net/projects/quazip/">QuaZIP project's page
- * at SourceForge.net</a>.
- *
  * \section platforms Platforms supported
  *
  * QuaZIP has been currently tested with Qt 4.0.0 on the following
@@ -49,7 +43,14 @@
  *
  * \section whats-new What is new in this version of QuaZIP?
  *
- * See the NEWS file supplied with the distribution.
+ * See NEWS file supplied with the distribution.
+ *
+ * \section getting Getting latest version of QuaZIP
+ *
+ * Check <a href="http://sourceforge.net/projects/quazip/">QuaZIP
+ * project's page at SourceForge.net</a>. Also, you may wish to read
+ * latest version documentation available at the <a
+ * href="http://quazip.sourceforge.net/">QuaZIP web site</a>.
  *
  * \section Requirements
  *
@@ -60,11 +61,12 @@
  *
  * \note Instructions given in this section assume that you are
  * using some UNIX dialect, but the build process should be very similar
- * on win32-g++ platform too. On other platforms it's essentially the
- * same process, maybe with some qmake adjustments not specific to
- * QuaZIP itself.
+ * on win32-g++ platform too. Sorry, but other platforms are
+ * undocumented. I do not think it is a big deal, though - it is
+ * standard usage of the Qt's qmake, so you most probably already know
+ * everything that is required.
  *
- * To build the library, run:
+ * To build it on some UNIX dialect:
 \verbatim
 $ cd /wherever/quazip/source/is/quazip-x.y.z/quazip
 $ qmake [PREFIX=where-to-install]
@@ -119,22 +121,25 @@ $ ./unzip
 $ make install
 \endverbatim
  *
- * By default, QuaZIP compiles as a DLL, but you have other
+ * By default, QuaZIP compiles as static library, but you have other
  * options:
- * - Just copy appropriate source files to your project and use them,
- * but you need to define QUAZIP_STATIC before including any QuaZIP
- * headers (best done as a compiler option). This will save you from
- * possile side effects of importing/exporting QuaZIP symbols.
- * - Compile it as a static library using CONFIG += staticlib qmake
- * option. QUAZIP_STATIC is defined automatically by qmake in this case.
+ * - Just copy appropriate source files to your project and use them;
+ * - Compile QuaZIP as shared library by changing "staticlib" in
+ *   quazip/quazip.pro to "dll".
  *
- * Binary compatibility isn't guaranteed even between minor releases,
- * but usually it's preserved, thanks to the Pimpl idiom.
+ * Latter is not recommended because future versions of QuaZIP most
+ * probably will be binary incompatible.
  *
  * \section using Using
  *
  * See \ref usage "usage page".
  * 
+ * \section bugs Bugs
+ *
+ * QuaZIP is currently at the initial development stage. Therefore,
+ * there are may be plenty of bugs and other bad things. Bug reports and
+ * patches are always welcome (see "contacts" below).
+ *
  * \section contacts Authors and contacts
  *
  * This wrapper has been written by Sergey A. Tachenov, AKA Alqualos.
@@ -147,20 +152,41 @@ $ make install
  * though, that I fix all the bugs you report in, add any features you
  * want, or respond to your critics, or respond to your feedback at all.
  * I may be busy, I may be tired of working on QuaZIP, I may be even
- * dead already (you never know...).
+ * dead already (you never know...). But regardless of this remark, any
+ * feedback is always welcome. This may seem like a paradox to you, but
+ * you do not have to understand it to write feedback.
  *
  * To report bugs or to post ideas about what should be done, use
  * SourceForge.net's <a
  * href="http://sourceforge.net/tracker/?group_id=142688">trackers</a>.
  * If you want to send me a private message, use my e-mail address
- * stachenov@gmail.com.
+ * laerel at yandex dot ru (but do not you dare to put it somewhere on
+ * the Web or wherever).
  *
  * Do not use e-mail to report bugs, please. Reporting bugs and problems
  * with the SourceForge.net's bug report system has that advantage that
- * it is visible to public, and I can always search for open tickets
- * that were created long ago. It is highly unlikely that I will search
- * my mail for that kind of stuff, so if a bug reported by mail isn't
- * fixed immediately, it will likely be forgotten forever.
+ * it is visible to public.
  *
- * Copyright (C) 2005-2011 Sergey A. Tachenov
+ * \section other-projects My other projects
+ *
+ * As of this moment, I did not write any other useful open source
+ * software (well, I am too lazy to do it) except for one little thing:
+ *
+ * <a href="http://brededor.narod.ru/progs/arcanum50patch.htm">Arcanum
+ * universal cap remover</a>. Arcanum is the old but very good game,
+ * which has one stupid limit: your character maximum level is 50, which
+ * is too low for many players including me. So I wrote this simple
+ * patch to increase this stupid limit to something acceptable.
+ *
+ * Also, my first Web project, which can be of any interest to you only
+ * if you can read Russian and you are crazy ^_- This is a web site with
+ * the main topic of it being The Delirium. It is totally meaningless
+ * and it was purposely made to be such. Do not ask me why - I do not
+ * know either. I just did that. If you are interested, then welcome to
+ * <a href="http://brededor.narod.ru/">The Brededor</a>. It does not get
+ * updated lately because I have become even lazier than I ever was. But
+ * I do not plan to destroy The Brededor no matter what, because I think
+ * it is fun.
+ *
+ * Copyright (C) 2005-2007 Sergey A. Tachenov
  **/
