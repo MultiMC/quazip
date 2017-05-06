@@ -1,63 +1,82 @@
-project(QuaZip)
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1)
 
-# CMP0042: Explicitly acknowledge MACOSX_RPATH
-# (introduced in CMake 2.8.12, enabled by default in CMake 3.0,
-# and producing a warning when unset since 3.7.1)
-cmake_policy(SET CMP0042 NEW)
+project(MultiMC_quazip)
 
-option(BUILD_WITH_QT4 "Build QuaZip with Qt4 no matter if Qt5 was found" OFF)
+#### LIBRARY ####
+find_package(ZLIB REQUIRED)
+find_package(Qt5Core REQUIRED)
 
-if( NOT BUILD_WITH_QT4 )
-    # try Qt5 first, and prefer that if found
-    find_package(Qt5Core QUIET)
+set(QUAZIP_SRC
+	quazip/crypt.h
+	quazip/ioapi.h
+	quazip/JlCompress.cpp
+	quazip/JlCompress.h
+	quazip/qioapi.cpp
+	quazip/quaadler32.cpp
+	quazip/quaadler32.h
+	quazip/quachecksum32.h
+	quazip/quacrc32.cpp
+	quazip/quacrc32.h
+	quazip/quagzipfile.cpp
+	quazip/quagzipfile.h
+	quazip/quaziodevice.cpp
+	quazip/quaziodevice.h
+	quazip/quazip.cpp
+	quazip/quazip.h
+	quazip/quazip_global.h
+	quazip/quazipdir.cpp
+	quazip/quazipdir.h
+	quazip/quazipfile.cpp
+	quazip/quazipfile.h
+	quazip/quazipfileinfo.cpp
+	quazip/quazipfileinfo.h
+	quazip/quazipnewinfo.cpp
+	quazip/quazipnewinfo.h
+	quazip/unzip.c
+	quazip/unzip.h
+	quazip/zip.c
+	quazip/zip.h
+)
+
+if (Qt5_POSITION_INDEPENDENT_CODE)
+    SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
-if(Qt5Core_FOUND)
-    set(CMAKE_CXX_STANDARD 11)
-    set(QTCORE_LIBRARIES ${Qt5Core_LIBRARIES})
-    set(QUAZIP_LIB_VERSION_SUFFIX 5)
-    # if there is no QT_ROOT, try to deduce it from Qt QtCore include
-    if("${QT_ROOT}" STREQUAL "")
-        set(QT_ROOT ${QT_QTCORE_INCLUDE_DIR}/../..)
-    endif()
-    include_directories(${Qt5Core_INCLUDE_DIRS})
+add_library(MultiMC_quazip SHARED ${QUAZIP_SRC})
+target_include_directories(MultiMC_quazip PUBLIC "quazip" "${CMAKE_CURRENT_BINARY_DIR}" PRIVATE ${ZLIB_INCLUDE_DIRS})
+target_link_libraries(MultiMC_quazip ${ZLIB_LIBRARIES})
+target_compile_definitions(MultiMC_quazip PRIVATE "-DQUAZIP_BUILD")
+set_target_properties(MultiMC_quazip PROPERTIES CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN 1)
+qt5_use_modules(MultiMC_quazip Core)
 
-    macro(qt_wrap_cpp)
-        qt5_wrap_cpp(${ARGN})
-    endmacro()
-else()
-    set(qt_min_version "4.5.0")
-    find_package(Qt4 REQUIRED)
-    set(QT_USE_QTGUI false)
-    include(${QT_USE_FILE})
-    include_directories(${QT_INCLUDES})
-    set(QTCORE_LIBRARIES ${QT_QTCORE_LIBRARY})
+#### UNIT TESTS ####
+find_package(Qt5Network REQUIRED)
+find_package(Qt5Test REQUIRED)
 
-    macro(qt_wrap_cpp)
-        qt4_wrap_cpp(${ARGN})
-    endmacro()
-endif()
+set(QUAZIP_TEST_SRC
+	qztest/qztest.cpp
+	qztest/qztest.h
+	qztest/testjlcompress.cpp
+	qztest/testjlcompress.h
+	qztest/testquachecksum32.cpp
+	qztest/testquachecksum32.h
+	qztest/testquagzipfile.cpp
+	qztest/testquagzipfile.h
+	qztest/testquaziodevice.cpp
+	qztest/testquaziodevice.h
+	qztest/testquazip.cpp
+	qztest/testquazip.h
+	qztest/testquazipdir.cpp
+	qztest/testquazipdir.h
+	qztest/testquazipfile.cpp
+	qztest/testquazipfile.h
+	qztest/testquazipfileinfo.cpp
+	qztest/testquazipfileinfo.h
+	qztest/testquazipnewinfo.cpp
+	qztest/testquazipnewinfo.h
+)
 
-# Use system zlib on unix and Qt ZLIB on Windows
-if(UNIX OR MINGW)
-    find_package(ZLIB REQUIRED)
-else(UNIX OR MINGW)
-    set(ZLIB_INCLUDE_DIRS "${QT_ROOT}/src/3rdparty/zlib" CACHE STRING "Path to ZLIB headers of Qt")
-    set(ZLIB_LIBRARIES "")
-    if(NOT EXISTS "${ZLIB_INCLUDE_DIRS}/zlib.h")
-        message("Please specify a valid zlib include dir")
-    endif(NOT EXISTS "${ZLIB_INCLUDE_DIRS}/zlib.h")
-endif(UNIX OR MINGW)
-
-# All build libraries are moved to this directory
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-
-set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)")
-set(LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
-set(QUAZIP_LIB_TARGET_NAME quazip${QUAZIP_LIB_VERSION_SUFFIX} CACHE
-    INTERNAL "Target name of libquazip" FORCE)
-
-add_subdirectory(quazip)
-
-install(FILES FindQuaZip.cmake RENAME FindQuaZip${QUAZIP_LIB_VERSION_SUFFIX}.cmake DESTINATION ${CMAKE_ROOT}/Modules)
+add_executable(MultiMC_quazip_test ${QUAZIP_TEST_SRC})
+target_link_libraries(MultiMC_quazip_test MultiMC_quazip)
+qt5_use_modules(MultiMC_quazip_test Network Test)
+add_test(NAME quazip_testsuite COMMAND MultiMC_quazip_test)

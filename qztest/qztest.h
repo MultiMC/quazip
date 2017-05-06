@@ -22,7 +22,7 @@ along with QuaZIP.  If not, see <http://www.gnu.org/licenses/>.
 See COPYING file for the full LGPL text.
 
 Original ZIP package is copyrighted by Gilles Vollant and contributors,
-see quazip/(un)zip.h files for details. Basically it's the zlib license.
+see (un)zip.h files for details. Basically it's the zlib license.
 */
 
 #include <QIODevice>

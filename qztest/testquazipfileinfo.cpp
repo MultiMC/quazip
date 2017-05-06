@@ -8,10 +8,10 @@
 
 #include <QtTest/QtTest>
 
-#include "quazip/quazip.h"
-#include "quazip/quazipfile.h"
-#include "quazip/quazipfileinfo.h"
-#include "quazip/quazipnewinfo.h"
+#include "quazip.h"
+#include "quazipfile.h"
+#include "quazipfileinfo.h"
+#include "quazipnewinfo.h"
 
 TestQuaZipFileInfo::TestQuaZipFileInfo(QObject *parent) :
     QObject(parent)

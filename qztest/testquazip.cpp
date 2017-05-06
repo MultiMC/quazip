@@ -19,7 +19,7 @@ along with QuaZIP.  If not, see <http://www.gnu.org/licenses/>.
 See COPYING file for the full LGPL text.
 
 Original ZIP package is copyrighted by Gilles Vollant and contributors,
-see quazip/(un)zip.h files for details. Basically it's the zlib license.
+see (un)zip.h files for details. Basically it's the zlib license.
 */
 
 #include "testquazip.h"
@@ -39,8 +39,8 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
 
 #include <QtTest/QtTest>
 
-#include <quazip/quazip.h>
-#include <quazip/JlCompress.h>
+#include <quazip.h>
+#include <JlCompress.h>
 
 void TestQuaZip::getFileList_data()
 {
