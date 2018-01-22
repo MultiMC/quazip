@@ -49,6 +49,9 @@ target_compile_definitions(MultiMC_quazip PRIVATE "-DQUAZIP_BUILD")
 set_target_properties(MultiMC_quazip PROPERTIES CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN 1)
 qt5_use_modules(MultiMC_quazip Core)
 
+# Install it
+install(TARGETS MultiMC_quazip DESTINATION ${LIBRARY_DEST_DIR})
+
 #### UNIT TESTS ####
 find_package(Qt5Network REQUIRED)
 find_package(Qt5Test REQUIRED)
