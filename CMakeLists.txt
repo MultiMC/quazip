@@ -50,7 +50,11 @@ set_target_properties(MultiMC_quazip PROPERTIES CXX_VISIBILITY_PRESET hidden VIS
 qt5_use_modules(MultiMC_quazip Core)
 
 # Install it
-install(TARGETS MultiMC_quazip DESTINATION ${LIBRARY_DEST_DIR})
+install(
+	TARGETS MultiMC_quazip
+	RUNTIME DESTINATION ${LIBRARY_DEST_DIR}
+	LIBRARY DESTINATION ${LIBRARY_DEST_DIR}
+)
 
 #### UNIT TESTS ####
 find_package(Qt5Network REQUIRED)
