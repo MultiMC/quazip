@@ -44,10 +44,9 @@ endif()
 
 add_library(MultiMC_quazip SHARED ${QUAZIP_SRC})
 target_include_directories(MultiMC_quazip PUBLIC "quazip" "${CMAKE_CURRENT_BINARY_DIR}" PRIVATE ${ZLIB_INCLUDE_DIRS})
-target_link_libraries(MultiMC_quazip ${ZLIB_LIBRARIES})
+target_link_libraries(MultiMC_quazip Qt5::Core ${ZLIB_LIBRARIES})
 target_compile_definitions(MultiMC_quazip PRIVATE "-DQUAZIP_BUILD")
 set_target_properties(MultiMC_quazip PROPERTIES CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN 1)
-qt5_use_modules(MultiMC_quazip Core)
 
 # Install it
 install(
@@ -84,6 +83,5 @@ set(QUAZIP_TEST_SRC
 )
 
 add_executable(MultiMC_quazip_test ${QUAZIP_TEST_SRC})
-target_link_libraries(MultiMC_quazip_test MultiMC_quazip)
-qt5_use_modules(MultiMC_quazip_test Network Test)
+target_link_libraries(MultiMC_quazip_test MultiMC_quazip Qt5::Network Qt5::Test)
 add_test(NAME quazip_testsuite COMMAND MultiMC_quazip_test)
