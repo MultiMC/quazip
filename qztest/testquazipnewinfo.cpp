@@ -39,7 +39,7 @@ void TestQuaZipNewInfo::setFileNTFSTimes()
         QFileInfo fileInfo("tmp/test.txt");
         QDateTime lm = fileInfo.lastModified().toUTC();
         QDateTime lr = fileInfo.lastRead().toUTC();
-        QDateTime cr = fileInfo.created().toUTC();
+        QDateTime cr = fileInfo.birthTime().toUTC();
         mTicks = (static_cast<qint64>(base.date().daysTo(lm.date()))
                 * Q_UINT64_C(86400000)
                 + static_cast<qint64>(base.time().msecsTo(lm.time())))

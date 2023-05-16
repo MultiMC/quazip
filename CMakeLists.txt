@@ -4,7 +4,7 @@ project(Launcher_quazip)
 
 #### LIBRARY ####
 find_package(ZLIB REQUIRED)
-find_package(Qt5Core REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core Test Network Core5Compat)
 
 set(QUAZIP_SRC
 	quazip/crypt.h
@@ -38,13 +38,9 @@ set(QUAZIP_SRC
 	quazip/zip.h
 )
 
-if (Qt5_POSITION_INDEPENDENT_CODE)
-    SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
-endif()
-
 add_library(Launcher_quazip SHARED ${QUAZIP_SRC})
 target_include_directories(Launcher_quazip PUBLIC "quazip" "${CMAKE_CURRENT_BINARY_DIR}" PRIVATE ${ZLIB_INCLUDE_DIRS})
-target_link_libraries(Launcher_quazip Qt5::Core ${ZLIB_LIBRARIES})
+target_link_libraries(Launcher_quazip Qt6::Core Qt6::Core5Compat ${ZLIB_LIBRARIES})
 target_compile_definitions(Launcher_quazip PRIVATE "-DQUAZIP_BUILD")
 set_target_properties(Launcher_quazip PROPERTIES CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN 1)
 
@@ -56,9 +52,6 @@ install(
 )
 
 #### UNIT TESTS ####
-find_package(Qt5Network REQUIRED)
-find_package(Qt5Test REQUIRED)
-
 set(QUAZIP_TEST_SRC
 	qztest/qztest.cpp
 	qztest/qztest.h
@@ -83,5 +76,5 @@ set(QUAZIP_TEST_SRC
 )
 
 add_executable(Launcher_quazip_test ${QUAZIP_TEST_SRC})
-target_link_libraries(Launcher_quazip_test Launcher_quazip Qt5::Network Qt5::Test)
+target_link_libraries(Launcher_quazip_test Launcher_quazip Qt6::Network Qt6::Test)
 add_test(NAME quazip_testsuite COMMAND Launcher_quazip_test)

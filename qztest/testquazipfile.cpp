@@ -33,8 +33,14 @@ see (un)zip.h files for details. Basically it's the zlib license.
 #include <QFile>
 #include <QString>
 #include <QStringList>
+#include <QRandomGenerator>
 
 #include <QtTest/QtTest>
+
+static int randomNumber()
+{
+    return QRandomGenerator::global()->generate();
+}
 
 void TestQuaZipFile::zipUnzip_data()
 {
@@ -297,11 +303,11 @@ void TestQuaZipFile::posWrite()
         QCOMPARE(zipFile.pos(), (qint64) 1);
         QByteArray buffer(size / 2 - 1, '\0');
         for (int i = 0; i < buffer.size(); ++i)
-            buffer[i] = static_cast<char>(qrand());
+            buffer[i] = static_cast<char>(randomNumber());
         zipFile.write(buffer);
         QCOMPARE(zipFile.pos(), qint64(size / 2));
         for (int i = 0; i < size - size / 2; ++i) {
-            zipFile.putChar(static_cast<char>(qrand()));
+            zipFile.putChar(static_cast<char>(randomNumber()));
         }
         QCOMPARE(zipFile.pos(), qint64(size));
     }
@@ -456,9 +462,8 @@ void TestQuaZipFile::setFileAttrs()
                 QFile::WriteOther | QFile::ReadOther | QFile::ExeOther;
         QCOMPARE(info.getPermissions() & usedPermissions,
                  srcInfo.permissions() & usedPermissions);
-        // I really hope Qt 6 will use quint64 for time_t!
-        quint64 newTime = info.dateTime.toTime_t();
-        quint64 oldTime = srcInfo.lastModified().toTime_t();
+        auto newTime = info.dateTime.toSecsSinceEpoch();
+        auto oldTime = srcInfo.lastModified().toSecsSinceEpoch();
         // ZIP uses weird format with 2 second precision
         QCOMPARE(newTime / 2, oldTime / 2);
         readFileAttrs.close();
