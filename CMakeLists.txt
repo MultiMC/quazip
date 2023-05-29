@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.1)
 project(Launcher_quazip)
 
 #### LIBRARY ####
-find_package(ZLIB REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core Test Network Core5Compat)
 
 set(QUAZIP_SRC
@@ -40,7 +39,7 @@ set(QUAZIP_SRC
 
 add_library(Launcher_quazip SHARED ${QUAZIP_SRC})
 target_include_directories(Launcher_quazip PUBLIC "quazip" "${CMAKE_CURRENT_BINARY_DIR}" PRIVATE ${ZLIB_INCLUDE_DIRS})
-target_link_libraries(Launcher_quazip Qt6::Core Qt6::Core5Compat ${ZLIB_LIBRARIES})
+target_link_libraries(Launcher_quazip Qt6::Core Qt6::Core5Compat zlibstatic)
 target_compile_definitions(Launcher_quazip PRIVATE "-DQUAZIP_BUILD")
 set_target_properties(Launcher_quazip PROPERTIES CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN 1)
 
